@@ -37,6 +37,12 @@ body {
             width: 100%;
         }
 
+            #gameTime {
+                height: 90%;
+                width: 50%;
+                color: black;
+            }
+
     #gameArea {
         height: 90%;
         width: 100%;
