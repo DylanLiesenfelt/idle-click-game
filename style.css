@@ -81,11 +81,42 @@ body {
                     outline: 1px solid blue ;
                     height: 100%;
                     width: 30%;
+                    text-align: center;
                 }
 
         #enemyArea {
             height: 100%;
             width: 100%;
+            flex-direction: column;
         }
 
+            #enemyInfo {
+                outline: 1px solid red;
+                height: 10%;
+                width: 70%;
+            }
+
+            #enemy {
+                outline: 1px solid blue;
+                height: 50%;
+                width: 40%;
+            }
+
+            #enemyHealth {
+                height: 30%;
+                width: 70%;
+            }
+
+                #enemyHpBar {
+                    outline: 1px solid black;
+                    height: 40%;
+                    width: 100%;
+                    justify-content: flex-start;
+                }
+
+                    #barFill {
+                        background-color: green;
+                        height: 100%;
+                        width: 50%;
+                    }
             
