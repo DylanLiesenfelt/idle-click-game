@@ -70,24 +70,28 @@ function assignEnemy(enemyLeft, enemyIndex) {
 }
 
 function loadEnemy(enemy) {
-
+    const maxHp = enemy.hp
+    let currentHp = (enemy.hp / maxHp) * 100
+    document.getElementById('enemyName').textContent = `${enemy.name}`
+    document.getElementById('enemy').style.backgroundImage = `url(${enemy.image})`
+    document.getElementById('barFill').style.width = `${currentHp}%`
 }
 
 
-function combat() {
-    
+function combat(enemy) {
+    enemy.hp -= power * projectile
 
     return true
 }
-
-// enemyDefeated = combat()
-
+ 
 function game() {
     console.log('Game Running')
     gameClock()
     if (gameLevel <= 11) {
         currentEnemy = assignEnemy(enemyLeft, enemyIndex)
-        console.log(currentEnemy)
+        loadEnemy(currentEnemy)
+        let dama = combat(currentEnemy)
+        console.log(dama)
     }
 }
 
