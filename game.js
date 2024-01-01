@@ -16,7 +16,7 @@ async function gameClock() {
     };
 };
 
-
+gameClock();
 
 /*----------  Elements  ----------*/
 const pointsDisplay = document.getElementById('points')
@@ -46,6 +46,8 @@ let projectiles = 1
 let powerUpgrade = 5
 let speedUpgrade = 5
 let projectileUpgrade = 20
+let combatInterval;
+let gameSpeed = 1000
 
 powerCountDisplay.textContent = power
 speedCountDisplay.textContent = speed
@@ -90,11 +92,20 @@ powerButton.addEventListener('click', function() {
 }) 
 
 speedButton.addEventListener('click', function() {
-    speed += 1
-    speedCountDisplay.textContent = speed
-    speedUpgrade = (speed * speed) * 5
-    speedButton.textContent = `Speed (Upgrade: ${speedUpgrade})`
-}) 
+    speed += 1;
+    speedCountDisplay.textContent = speed;
+    speedUpgrade = (speed * speed) * 5;
+    speedButton.textContent = `Speed (Upgrade: ${speedUpgrade})`;
+
+    // Update the gameSpeed based on the new speed
+    gameSpeed = 1000 / speed; // Adjust gameSpeed inversely proportional to the speed
+
+    // Update the combat loop interval dynamically if it's currently running
+    if (combatInterval) {
+        clearInterval(combatInterval);
+        combatInterval = setInterval(() => combat(currentEnemy), gameSpeed);
+    }
+});
 
 projectileButton.addEventListener('click', function() {
     projectiles += 1
@@ -103,27 +114,44 @@ projectileButton.addEventListener('click', function() {
     projectileButton.textContent = `Projectile (Upgrade: ${projectileUpgrade})`
 }) 
 
+let currentEnemy; // Declare currentEnemy globally
+
 function pullEnemy() {
     let enemyIndex = gameLevel - 1
-    let currentEnemy = enemyList[enemyIndex]
-
+    currentEnemy = enemyList[enemyIndex]
     enemyNameDisplay.textContent = currentEnemy.name
     enemyImage.style.backgroundImage = `url(${currentEnemy.image})`
     enemyHpBarFill.textContent = `${currentEnemy.health}`
-    
     return currentEnemy
 }
 
-function combat() {
-    
+function combat(enemy) {
+    const damage = power * projectiles;
+    enemy.health -= damage;
+    enemyHpBarFill.textContent = `${enemy.health}`;
 }
 
 
 /*----------  Game  ----------*/
-pullEnemy()
+
 
 function game() {
-    gameClock()
+    currentEnemy = pullEnemy();
+
+    combatInterval = setInterval(() => {
+        combat(currentEnemy);
+        if (currentEnemy.health <= 0) {
+            clearInterval(combatInterval);
+            gameLevel++; // Increase level or any other game logic for level progression
+            
+            if (gameLevel <= enemyList.length) {
+                game(); // Start the game again with a new enemy if available
+            } else {
+                // Game completion logic (e.g., displaying victory message, resetting game, etc.)
+            }
+        }
+    }, gameSpeed); // Use gameSpeed for combat loop timing
 }
 
-game()
+
+game();
